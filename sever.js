@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const { Pool } = require('pg');
 
 const app = express();
 
@@ -9,17 +8,9 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-const pool = new Pool({
-    user: 'G',
-    host: 'localhost',
-    database: 'graphdb',
-    password: '1234',
-    
-    port: 5432,
-    });
 
 app.get('/' , (req , res)=>{
-    res.render('index');
+    res.render('login');
 });
 
 app.get('/index' , (req , res)=>{
