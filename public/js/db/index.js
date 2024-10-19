@@ -1,35 +1,30 @@
 import express from 'express'; // Library HTTP request
 import dotenv from 'dotenv'; 
-import cors from 'cors'; // โหลด Middleware
 dotenv.config({ path: 'setting.env' });  // โหลดไฟล์ setting 
 
 const app = express();
 const port = process.env.WEB_PORT;
-const projectName = process.env.PROJECT_NAME;
 
-import alive from './utils/alive.js';
-import prefixRoutes from './routes/prefixRoutes.js'
-// import exampleRoutes from './routes/exampleRoutes.js'
+import curriculumRoutes from './routes/curriculumRoutes.js' ;
+import prefixRoutes from './routes/prefixRoutes.js' ;
+// import sectionRoutes from './routes/sectionRoutes.js' ;
+// import student_listRoutes from './routes/student_listRoutes.js' ;
+// import studentRoutes from './routes/studentRoutes.js' ;
 
-app.use(cors());  // ไว้เปิดช่องให้สามารถดึง api จากฝั่งหน้าบ้านได้
-app.use(express.json());  // Middleware ให้ระบบรองรับ การรับค่าเข้ามาได้โดยใช้ไฟล์ JSON
-app.use(express.urlencoded({ extended: true }));  // Middleware ให้ระบบรองรับ การรับค่าเข้ามาได้โดยใช้ไฟล์ urlencoded
+
+
+app.use(express.json());
  
 // Use student routes
-app.use('/api/prefixs', prefixRoutes);            // localhost:4200/api/prefixs/
-// app.use('/api/example', exampleRoutes);        // localhost:4200/api/example/
+app.use('/api/curriculum', curriculumRoutes);
+app.use('/api/prefixs', prefixRoutes);
+// app.use('/api/section', sectionRoutes);
+// app.use('/api/student_list', student_listRoutes);
+// app.use('/api/student', studentRoutes);
 
-// Base route
-app.get('/', (req, res) => {
-  res.send(alive);
-});
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Compiled successfully!`);
-  console.log(`You can now view ${projectName} in the postman or browser.`);
-  console.log(`  `);
-  console.log(`  Local: http://localhost:${port}`);
-  console.log(`  `);
+  console.log(` Server is running on PORT ${port}`);
 });
 

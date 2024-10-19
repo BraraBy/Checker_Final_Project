@@ -9,7 +9,7 @@ const getAllPrefix = async () => {
     result = await client.query('SELECT * FROM prefix;');
     return result.rows;
   } catch (err) {
-    console.error('Error fetching all prefixes:', err);
+    console.error('Error fetching all Prefixes :', err);
     throw err;
   } finally {
     client.release();
@@ -23,7 +23,7 @@ const getPrefixById = async (id) => {
     result = await client.query('SELECT * FROM prefix WHERE id = $1;', [id]);
     return result.rows;
   } catch (err) {
-    console.error(`Error fetching prefix with ID ${id}:`, err);
+    console.error(`Error fetching Prefix at ID ${id}  :`, err);
     throw err;
   } finally {
     client.release();
@@ -38,7 +38,7 @@ const getPrefixByName = async (data) => {
     result = await client.query('SELECT * FROM prefix WHERE name = $1;', [name]);
     return result.rows.length > 0 ? result.rows[0] : null;
   } catch (err) {
-    console.error(`Error fetching prefix with name ${name}:`, err);
+    console.error(`Error fetching Prefix at Name ${name} :`, err);
     throw err;
   } finally {
     client.release();
@@ -46,7 +46,7 @@ const getPrefixByName = async (data) => {
 };
 
 // Check if Prefix Name is Duplicate.
-const isPrefixNameDuplicate = async (data) => {
+const CheckPrefixName = async (data) => {
   const client = await postgres.connect();
   const { name } = data;
   try {
@@ -55,8 +55,8 @@ const isPrefixNameDuplicate = async (data) => {
       [name]
     );
     return result.rows.length > 0;
-  } catch (err) {
-    console.error('Error checking for duplicate prefix name:', err);
+  } catch (err) { 
+    console.error('Error checking Prefix name : ', err);
     throw err;
   } finally {
     client.release();
@@ -73,7 +73,7 @@ const createPrefix = async (data) => {
     );
     return result.rows;
   } catch (err) {
-    console.error(`Error creating new prefix with name ${name}:`, err);
+    console.error(`Error creating new Prefix at name ${name} :`, err);
     throw err;
   } finally {
     client.release();
@@ -88,9 +88,9 @@ const updatePrefix = async (id, data) => {
     const result = await client.query(
       `UPDATE prefix SET name = $1 WHERE id = $2 RETURNING *;`, [name, id]
     );
-    return result.rows.length > 0 ? result.rows : 'prefix not found';
+    return result.rows.length > 0 ? result.rows : 'Prefix not found';
   } catch (err) {
-    console.error(`Error updating prefix with ID ${id}:`, err);
+    console.error(`Error updating Prefix at ID ${id} :`, err);
     throw err;
   } finally {
     client.release();
@@ -99,15 +99,15 @@ const updatePrefix = async (id, data) => {
 
 
 // Force Delete Prefix record.
-const forceDeletePrefix = async (id) => {
+const DeletePrefix = async (id) => {
   const client = await postgres.connect();
   try {
     const result = await client.query(
       `DELETE FROM prefix WHERE id = $1 RETURNING *;`, [id]
     );
-    return result.rows.length > 0 ? result.rows[0] : 'prefix not found';
+    return result.rows.length > 0 ? result.rows[0] : 'Prefix not found';
   } catch (err) {
-    console.error(`Error force deleting prefix with ID ${id}:`, err);
+    console.error(`Error deleting Prefix at ID ${id} :`, err);
     throw err;
   } finally {
     client.release();
@@ -118,8 +118,8 @@ export default {
   getAllPrefix,
   getPrefixById,
   getPrefixByName,
-  isPrefixNameDuplicate,
+  CheckPrefixName,
   createPrefix,
   updatePrefix,
-  forceDeletePrefix,
+  DeletePrefix,
 };

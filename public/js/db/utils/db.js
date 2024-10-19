@@ -1,5 +1,5 @@
-import pkg from 'pg';
-const { Pool } = pkg;
+import pool from 'pg';
+const { Pool } = pool;
 
 import dotenv from 'dotenv';
 dotenv.config({ path: 'setting.env' });

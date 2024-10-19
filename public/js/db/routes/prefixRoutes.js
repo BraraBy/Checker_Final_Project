@@ -3,13 +3,6 @@ import PrefixController from '../controllers/prefixController.js';
 
 const router = express.Router();
 
-/* API Routing Path
-    Get localhost:4200/api/prefixs/
-    Get localhost:4200/api/prefixs/:id
-    Create localhost:4200/api/prefixs/
-    Delete localhost:4200/api/prefixs/:id
-*/
-
 // เช่น localhost:4200/api/prefixs/ ปรับ postman เป็น GET
 // Get all prefixs (GET /api/prefixs/)
 router.get('/', async (req, res) => {
@@ -18,7 +11,7 @@ router.get('/', async (req, res) => {
     res.status(200).json({ status: '200', result: data });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ status: '500', result: 'Internal Server Error' });
+    res.status(500).json({ status: '500', result: 'Server Error' });
   }
 });
 
@@ -34,10 +27,10 @@ router.get('/:id', async (req, res) => {
     if (data != null) {
       res.status(200).json({ status: '200', result: data });
     } else {
-      res.status(400).json({ code: '400', description: 'Prefix ID not found.' });
+      res.status(400).json({ code: '400', description: 'not found' });
     }
   } catch (err) {
-    res.status(500).json({ status: '500', result: 'Internal Server Error' });
+    res.status(500).json({ status: '500', result: 'Server Error' });
   }
 });
 
@@ -51,15 +44,15 @@ router.post('/', async (req, res) => {
     res.status(400).json({ status: '400', result: 'name is required.' });
   }
   try {
-    const checkName = await PrefixController.isPrefixNameDuplicate(prefixData)
+    const checkName = await PrefixController.CheckPrefixName(prefixData)
     if (!checkName) {
       const data = await PrefixController.createPrefix(prefixData);
-      res.status(201).json({ status: 201, result: data });
+      res.status(200).json({ status: 200, result: data });
     } else {
-      res.status(400).json({ status: '400', result: 'Prefix name is duplicated.' });
+      res.status(400).json({ status: '400', result: 'Error' });
     }
   } catch (err) {
-    res.status(500).json({ status: 500, message: 'Error creating prefix' });
+    res.status(500).json({ status: 500, message: 'Server Error' });
   }
 });
 
@@ -72,20 +65,20 @@ router.put('/:id', async (req, res) => {
   };
 
   if (!id) {
-    res.status(400).json({ status: '400', result: 'update must be have input.' });
+    res.status(400).json({ status: '400', result: 'Need input' });
   }
   try {
-    const checkName = await PrefixController.isPrefixNameDuplicate(prefixData)
+    const checkName = await PrefixController.CheckPrefixName(prefixData)
     if (!checkName) {
       const data = await PrefixController.updatePrefix(id, prefixData);
       res.status(201).json({ status: '201', result: data });
     }
     else {
-      res.status(400).json({ status: '400', result: 'Prefix name is duplicated.' });
+      res.status(400).json({ status: '400', result: 'Error' });
     }
 
   } catch (err) {
-    res.status(500).json({ status: '500', result: 'Internal Server Error' });
+    res.status(500).json({ status: '500', result: 'Server Error' });
   }
 })
 
@@ -94,13 +87,13 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   if (!id) {
-    res.status(400).json({ status: '400', result: 'id is requires.' })
+    res.status(400).json({ status: '400', result: 'ID is requires.' })
   }
   try {
-    const data = await PrefixController.forceDeletePrefix(id);
-    res.status(201).json({ status: '201', result: data, desc: 'Forces deleted completed.' });
+    const data = await PrefixController.DeletePrefix(id);
+    res.status(200).json({ status: '200', result: data, desc: 'Deleted completed' });
   } catch (err) {
-    res.status(500).json({ status: '500', result: 'Internal Server Error' });
+    res.status(500).json({ status: '500', result: 'Server Error' });
   }
 })
 
