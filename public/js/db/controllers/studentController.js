@@ -2,28 +2,26 @@ import postgres from '../utils/db.js';
 
 let result = '';
 
-// Get All Prefix List. Only return Prefix where isDelete is false.
-const getAllStudent = async () => {
+const getAllStd = async () => {
   const client = await postgres.connect();
   try {
     result = await client.query('SELECT * FROM student;');
     return result.rows;
   } catch (err) {
-    console.error('Error fetching all Students:', err);
+    console.error('Error to get all Students :', err);
     throw err;
   } finally {
     client.release();
   }
 };
 
-// Get Prefixs By ID. Include deleted Prefix as well.
-const getStudentById = async (id) => {
+const getStdById = async (id) => {
   const client = await postgres.connect();
   try {
     result = await client.query('SELECT * FROM student WHERE id = $1;', [id]);
     return result.rows;
   } catch (err) {
-    console.error(`Error fetching Student ID ${id}:`, err);
+    console.error(`Error to get Student ID ${id}:`, err);
     throw err;
   } finally {
     client.release();
@@ -31,27 +29,26 @@ const getStudentById = async (id) => {
 };
 
 // Get Prefix by Name. Only returns prefix where isDelete is false.
-const getStudentByName = async (data) => {
+const getStdByName = async (data) => {
   const client = await postgres.connect();
   const { name } = data;
   try {
     result = await client.query('SELECT * FROM student WHERE name = $1;', [name]);
     return result.rows.length > 0 ? result.rows[0] : null;
   } catch (err) {
-    console.error(`Error fetching Student name ${name}:`, err);
+    console.error(`Error to get Student name ${name}:`, err);
     throw err;
   } finally {
     client.release();
   }
 };
 
-// Check if Prefix Name is Duplicate.
-const CheckStudentName = async (data) => {
+const checkStdName = async (data) => {
   const client = await postgres.connect();
   const { name } = data;
   try {
     const result = await client.query(
-      'SELECT * FROM student WHERE name = $1;',
+      'SELECT * FROM student WHERE id = $1 ;',
       [name]
     );
     return result.rows.length > 0;
@@ -65,7 +62,7 @@ const CheckStudentName = async (data) => {
 
 // Create new Prefix record.
 // Create new Student
-const createStudent = async (data) => {
+const createStd = async (data) => {
     const { id, prefix_id, first_name, last_name, date_of_birth, sex, curriculum_id, previous_school, address, telephone, email, line_id, status } = data;
     const client = await postgres.connect();
     try {
@@ -85,7 +82,7 @@ const createStudent = async (data) => {
   };
 
 // Update Student
-const updateStudent = async (id, data) => {
+const updateStd = async (id, data) => {
     const { prefix_id, first_name, last_name, date_of_birth, sex, curriculum_id, previous_school, address, telephone, email, line_id, status } = data;
     const client = await postgres.connect();
     try {
@@ -98,7 +95,7 @@ const updateStudent = async (id, data) => {
       );
       return result.rows;
     } catch (err) {
-      console.error(`Error updating Student with ID ${id}:`, err);
+      console.error(`Error updating Student at ID ${id}:`, err);
       throw err;
     } finally {
       client.release();
@@ -107,15 +104,15 @@ const updateStudent = async (id, data) => {
 
 
 // Force Delete Prefix record.
-const DeleteStudent = async (id) => {
+const deleteStd = async (id) => {
   const client = await postgres.connect();
   try {
     const result = await client.query(
       `DELETE FROM student WHERE id = $1 RETURNING *;`, [id]
     );
-    return result.rows.length > 0 ? result.rows[0] : 'Student not found';
+    return result.rows.length > 0 ? result.rows[0] : 'Not found';
   } catch (err) {
-    console.error(`Error deleting Student with ID ${id}:`, err);
+    console.error(`Error deleting Student at ID ${id}:`, err);
     throw err;
   } finally {
     client.release();
@@ -123,11 +120,11 @@ const DeleteStudent = async (id) => {
 };
 
 export default {
-  getAllStudent,
-  getStudentById,
-  getStudentByName,
-  CheckStudentName,
-  createStudent,
-  updateStudent,
-  DeleteStudent,
+  getAllStd,
+  getStdById,
+  getStdByName,
+  checkStdName,
+  createStd,
+  updateStd,
+  deleteStd
 };

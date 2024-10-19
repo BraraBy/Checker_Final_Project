@@ -1,8 +1,8 @@
-import postgres from '../../utils/db.js';
+import postgres from '../utils/db.js';
 
 let result = '';
 
-const getAllSection = async () => {
+const getAllSec = async () => {
     const client = await postgres.connect();
     try {
         result = await client.query('SELECT * FROM section ;');
@@ -15,7 +15,7 @@ const getAllSection = async () => {
     }
 };
 
-const getSectionById = async (id) => {
+const getSecById = async (id) => {
     const client = await postgres.connect();
     try {
         result = await client.query('SELECT * FROM section WHERE id = $1;', [id]);
@@ -29,21 +29,21 @@ const getSectionById = async (id) => {
     }
 };
 
-const getSectionByName = async (data) => {
+const getSecByName = async (data) => {
     const client = await postgres.connect();
     const { name } = data;
     try {
-        result = await client.query('SELECT * FROM section WHERE section = $1 and isdelete = FALSE;', [name]);
+        result = await client.query('SELECT * FROM section WHERE section = $1 ;', [name]);
         return result.rows.length > 0 ? result.rows[0] : null;
     } catch (err) {
-        console.error(`Error fetching section with name ${name}:`, err);
+        console.error(`Error fetching section at name ${name}:`, err);
         throw err;
     } finally {
         client.release();
     }
 };
 
-const CheckSection = async (data) => {
+const checkSec = async (data) => {
     const client = await postgres.connect();
     const { name } = data;
     try {
@@ -60,16 +60,16 @@ const CheckSection = async (data) => {
     }
 };
 
-const createSection = async (data) => {
+const createSec = async (data) => {
     const { name } = data;
     const client = await postgres.connect();
 
     try {
         const result = await client.query(
-            `INSERT INTO section (section, isdelete)
-             VALUES ($1, $2)
+            `INSERT INTO section (section)
+             VALUES ($1)
              RETURNING *;`,
-            [name, false ]
+            [name]
         );
         return result.rows;
     } catch (err) {
@@ -80,8 +80,8 @@ const createSection = async (data) => {
     }
 };
 
-const updateSection = async (id, data) => {
-    const { name } = data;
+const updateSec = async (id, data) => {
+    const { section } = data;
     const client = await postgres.connect();
     try {
         const result = await client.query(
@@ -89,7 +89,7 @@ const updateSection = async (id, data) => {
              SET section = $1
              WHERE id = $2
              RETURNING *;`,
-            [name, id]
+            [section, id]
         );
         return result.rows.length > 0 ? result.rows : 'Section not found';
     } catch (err) {
@@ -100,7 +100,7 @@ const updateSection = async (id, data) => {
     }
 };
 
-const DeleteSection = async (id) => {
+const deleteSec = async (id) => {
     const client = await postgres.connect();
     try {
         const result = await client.query(
@@ -116,11 +116,11 @@ const DeleteSection = async (id) => {
 };
 
 export default {
-    getAllSection,
-    getSectionById,
-    createSection,
-    updateSection,
-    getSectionByName,
-    CheckSection,
-    DeleteSection
+    getAllSec,
+    getSecById,
+    createSec,
+    updateSec,
+    getSecByName,
+    checkSec,
+    deleteSec
 };

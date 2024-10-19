@@ -1,5 +1,5 @@
 import express from 'express';
-import PrefixController from '../controllers/prefixController.js';
+import Controller from '../controllers/prefixController.js'
 
 const router = express.Router();
 
@@ -7,7 +7,7 @@ const router = express.Router();
 // Get all prefixs (GET /api/prefixs/)
 router.get('/', async (req, res) => {
   try {
-    const data = await PrefixController.getAllPrefix();
+    const data = await Controller.getAllPrefix();
     res.status(200).json({ status: '200', result: data });
   } catch (err) {
     console.log(err);
@@ -23,7 +23,7 @@ router.get('/:id', async (req, res) => {
     res.status(400).json({ status: '400', result: 'ID is required.' });
   }
   try {
-    const data = await PrefixController.getPrefixById(id);
+    const data = await Controller.getPrefixById(id);
     if (data != null) {
       res.status(200).json({ status: '200', result: data });
     } else {
@@ -37,19 +37,19 @@ router.get('/:id', async (req, res) => {
 // เช่น localhost:4200/api/prefixs/ ปรับ postman เป็น CREATE
 // Create a new prefixs (POST /api/prefixs/)
 router.post('/', async (req, res) => {
-  const prefixData = {
+  const info = {
     name: req.body.name,
   };
   if (!req.body.name) {
     res.status(400).json({ status: '400', result: 'name is required.' });
   }
   try {
-    const checkName = await PrefixController.CheckPrefixName(prefixData)
+    const checkName = await Controller.CheckPrefixName(info)
     if (!checkName) {
-      const data = await PrefixController.createPrefix(prefixData);
+      const data = await Controller.createPrefix(info);
       res.status(200).json({ status: 200, result: data });
     } else {
-      res.status(400).json({ status: '400', result: 'Error' });
+      res.status(400).json({ status: '400', result: 'Already exists' });
     }
   } catch (err) {
     res.status(500).json({ status: 500, message: 'Server Error' });
@@ -60,7 +60,7 @@ router.post('/', async (req, res) => {
 // Update a prefix by ID (UPDATE /api/prefixs/:id)
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
-  const prefixData = {
+  const info = {
     name: req.body.name,
   };
 
@@ -68,13 +68,13 @@ router.put('/:id', async (req, res) => {
     res.status(400).json({ status: '400', result: 'Need input' });
   }
   try {
-    const checkName = await PrefixController.CheckPrefixName(prefixData)
+    const checkName = await Controller.CheckPrefixName(info)
     if (!checkName) {
-      const data = await PrefixController.updatePrefix(id, prefixData);
+      const data = await Controller.updatePrefix(id, info);
       res.status(201).json({ status: '201', result: data });
     }
     else {
-      res.status(400).json({ status: '400', result: 'Error' });
+      res.status(400).json({ status: '400', result: 'Already exists' });
     }
 
   } catch (err) {
@@ -90,7 +90,7 @@ router.delete('/:id', async (req, res) => {
     res.status(400).json({ status: '400', result: 'ID is requires.' })
   }
   try {
-    const data = await PrefixController.DeletePrefix(id);
+    const data = await Controller.DeletePrefix(id);
     res.status(200).json({ status: '200', result: data, desc: 'Deleted completed' });
   } catch (err) {
     res.status(500).json({ status: '500', result: 'Server Error' });

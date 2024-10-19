@@ -1,40 +1,38 @@
-import postgres from '../../utils/db.js';  // Assuming you have your Postgres client set up
+import postgres from '../utils/db.js';
 
-// Function to mark attendance in student_list
-const markStudentList = async ({ student_id, section_id, attendance_date , status}) => {
+const insertStdList = async ({ student_id, section_id, attendance_date , status}) => {
     const client = await postgres.connect();
     try {
         const result = await client.query(
-            `INSERT INTO student_list (student_id, section_id, subject_id, attendance_date, status)
-             VALUES ($1, $2, $3, $4, $5)
+            `INSERT INTO student_list (student_id, section_id, attendance_date, status)
+             VALUES ($1, $2, $3, $4)
              RETURNING *;`,
-            [student_id, section_id, subject_id, attendance_date, status]
+            [student_id, section_id, attendance_date, status]
         );
         return result.rows[0];
     } catch (err) {
-        console.error('Error marking student_list:', err);
+        console.error('Error to Insert :', err);
         throw err;
     } finally {
         client.release();
     }
 };
 
-// Function to update attendance within 2-hour window
-const updateStudentList = async ({student_id, section_id, subject_id, attendance_date, status }) => {
+const updateStdList = async ({student_id, section_id, attendance_date, status }) => {
     const client = await postgres.connect();
 
     try {
-        const studentListResult = await client.query(
+        const upd = await client.query(
             `SELECT createdat FROM student_list
              WHERE student_id = $1 AND section_id = $2 AND attendance_date = $3`,
             [student_id, section_id, attendance_date]
         );
 
-        if (studentListResult.rows.length === 0) {
-            return { error: 'Record not found' };
+        if (upd.rows.length === 0) {
+            return { error: 'Not found' };
         }
 
-        const createdAt = studentListResult.rows[0].createdat;
+        const createdAt = upd.rows[0].createdat;
         const now = new Date();
         const timeDifference = Math.abs(now - new Date(createdAt)) / (1000 * 60 * 60);
 
@@ -60,7 +58,7 @@ const updateStudentList = async ({student_id, section_id, subject_id, attendance
 };
 
 // Function to retrieve all attendance records
-const getStudentList = async () => {
+const getStdList = async () => {
     const client = await postgres.connect();
     try {
         const result = await client.query(`SELECT * FROM student_list ORDER BY attendance_date DESC`);
@@ -73,4 +71,4 @@ const getStudentList = async () => {
     }
 };
 
-export default { markStudentList, updateStudentList, getStudentList };
+export default { insertStdList, updateStdList, getStdList };

@@ -2,7 +2,7 @@ import postgres from '../utils/db.js';
 
 let result = '';
 
-const getAllCurriculum = async () => {
+const getAllCurr = async () => {
     const client = await postgres.connect();
     try {
         result = await client.query('SELECT * FROM curriculum');
@@ -15,7 +15,7 @@ const getAllCurriculum = async () => {
     }
 };
 
-const getCurriculumById = async (id) => {
+const getCurrById = async (id) => {
     const client = await postgres.connect();
     try {
         result = await client.query('SELECT * FROM curriculum WHERE id = $1 ;', [id]);
@@ -29,7 +29,7 @@ const getCurriculumById = async (id) => {
     }
 };
 
-const getCurriculumByName = async (data,nameType) => {
+const getCurrByName = async (data,nameType) => {
     const client = await postgres.connect();
     const { name } = data;
     try {
@@ -43,7 +43,47 @@ const getCurriculumByName = async (data,nameType) => {
     }
 };
 
-const checkCurriculum = async (data, nameType, id= null) => {
+const createCurr = async (data) => {
+    const { curr_name_th, curr_name_en, short_name_th, short_name_en } = data;
+    const client = await postgres.connect();
+
+    try {
+        const result = await client.query(
+            `INSERT INTO curriculum (curr_name_th, curr_name_en, short_name_th, short_name_en)
+             VALUES ($1, $2, $3, $4)
+             RETURNING *;`,
+            [curr_name_th, curr_name_en, short_name_th, short_name_en]
+        );
+        return result.rows;
+    } catch (err) {
+        console.error(`Error creating new Curriculum : `, err);
+        throw err;
+    } finally {
+        client.release();
+    }
+};
+
+const updateCurr = async (id, data) => {
+    const { curr_name_th, curr_name_en, short_name_th, short_name_en } = data;
+    const client = await postgres.connect();
+    try {
+        const result = await client.query(
+            `UPDATE curriculum
+             SET curr_name_th = $1, curr_name_en = $2, short_name_th = $3, short_name_en = $4
+             WHERE id = $5
+             RETURNING *;`,
+            [curr_name_th, curr_name_en, short_name_th, short_name_en, id]
+        );
+        return result.rows.length > 0 ? result.rows : 'Curriculum not found';
+    } catch (err) {
+        console.error(`Error updating Curriculum : `, err);
+        throw err;
+    } finally {
+        client.release();
+    }
+};
+
+const checkCurr = async (data, nameType, id= null) => {
     const client = await postgres.connect();
     try {
         let query;
@@ -68,48 +108,7 @@ const checkCurriculum = async (data, nameType, id= null) => {
     }
 };
 
-
-const createCurriculum = async (data) => {
-    const { curr_name_th, curr_name_en, short_name_th, short_name_en } = data;
-    const client = await postgres.connect();
-
-    try {
-        const result = await client.query(
-            `INSERT INTO curriculum (curr_name_th, curr_name_en, short_name_th, short_name_en)
-             VALUES ($1, $2, $3, $4)
-             RETURNING *;`,
-            [curr_name_th, curr_name_en, short_name_th, short_name_en]
-        );
-        return result.rows;
-    } catch (err) {
-        console.error(`Error creating new Curriculum : `, err);
-        throw err;
-    } finally {
-        client.release();
-    }
-};
-
-const updateCurriculum = async (id, data) => {
-    const { curr_name_th, curr_name_en, short_name_th, short_name_en } = data;
-    const client = await postgres.connect();
-    try {
-        const result = await client.query(
-            `UPDATE curriculum
-             SET curr_name_th = $1, curr_name_en = $2, short_name_th = $3, short_name_en = $4
-             WHERE id = $5
-             RETURNING *;`,
-            [curr_name_th, curr_name_en, short_name_th, short_name_en, id]
-        );
-        return result.rows.length > 0 ? result.rows : 'Curriculum not found';
-    } catch (err) {
-        console.error(`Error updating Curriculum : `, err);
-        throw err;
-    } finally {
-        client.release();
-    }
-};
-
-const deleteCurriculum = async (id) => {
+const deleteCurr = async (id) => {
     const client = await postgres.connect();
     try {
         const result = await client.query(
@@ -125,11 +124,11 @@ const deleteCurriculum = async (id) => {
 };
 
 export default {
-    getAllCurriculum,
-    getCurriculumById,
-    getCurriculumByName,
-    checkCurriculum,
-    createCurriculum,
-    updateCurriculum,
-    deleteCurriculum
+    getAllCurr,
+    getCurrById,
+    getCurrByName,
+    checkCurr,
+    createCurr,
+    updateCurr,
+    deleteCurr
 };
