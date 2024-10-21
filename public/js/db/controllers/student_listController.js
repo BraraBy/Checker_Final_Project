@@ -1,13 +1,13 @@
 import postgres from '../utils/db.js';
 
-const insertStdList = async ({ student_id, section_id, attendance_date , status}) => {
+const insertStdList = async ({ student_id, section_id, status}) => {
     const client = await postgres.connect();
     try {
         const result = await client.query(
-            `INSERT INTO student_list (student_id, section_id, attendance_date, status)
-             VALUES ($1, $2, $3, $4)
+            `INSERT INTO student_list (student_id, section_id,status)
+             VALUES ($1, $2, $3)
              RETURNING *;`,
-            [student_id, section_id, attendance_date, status]
+            [student_id, section_id, status]
         );
         return result.rows[0];
     } catch (err) {
@@ -18,34 +18,26 @@ const insertStdList = async ({ student_id, section_id, attendance_date , status}
     }
 };
 
-const updateStdList = async ({student_id, section_id, attendance_date, status }) => {
+const updateStdList = async ({student_id, section_id, status }) => {
     const client = await postgres.connect();
 
     try {
         const upd = await client.query(
             `SELECT createdat FROM student_list
-             WHERE student_id = $1 AND section_id = $2 AND attendance_date = $3`,
-            [student_id, section_id, attendance_date]
+             WHERE student_id = $1 AND section_id = $2`,
+            [student_id, section_id,]
         );
 
         if (upd.rows.length === 0) {
             return { error: 'Not found' };
         }
 
-        const createdAt = upd.rows[0].createdat;
-        const now = new Date();
-        const timeDifference = Math.abs(now - new Date(createdAt)) / (1000 * 60 * 60);
-
-        if (timeDifference > 2) {
-            return { error: 'You can only update attendance within 2 hours of creation.' };
-        }
-
         const result = await client.query(
             `UPDATE student_list
              SET status = $1, updatedat = CURRENT_TIMESTAMP
-             WHERE student_id = $2 AND section_id = $3 AND  attendance_date = $4
+             WHERE student_id = $2 AND section_id = $3 AND  active_date = $4
              RETURNING *`,
-            [status,  student_id, section_id, attendance_date]
+            [status,  student_id, section_id, active_date]
         );
 
         return result.rows[0];
@@ -61,7 +53,7 @@ const updateStdList = async ({student_id, section_id, attendance_date, status })
 const getStdList = async () => {
     const client = await postgres.connect();
     try {
-        const result = await client.query(`SELECT * FROM student_list ORDER BY attendance_date DESC`);
+        const result = await client.query(`SELECT * FROM student_list ORDER BY active_date DESC`);
         return result.rows;
     } catch (err) {
         console.error('Error fetching records:', err);

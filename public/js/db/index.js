@@ -1,9 +1,15 @@
 import express from 'express'; // Library HTTP request
 import dotenv from 'dotenv'; 
+import cors from 'cors'; // โหลด Middleware
 dotenv.config({ path: 'setting.env' });  // โหลดไฟล์ setting 
 
 const app = express();
 const port = process.env.WEB_PORT;
+
+app.use(cors());  // ไว้เปิดช่องให้สามารถดึง api จากฝั่งหน้าบ้านได้
+app.use(express.json());  // Middleware ให้ระบบรองรับ การรับค่าเข้ามาได้โดยใช้ไฟล์ JSON
+app.use(express.urlencoded({ extended: true }));  // Middleware ให้ระบบรองรับ การรับค่าเข้ามาได้โดยใช้ไฟล์ urlencoded
+
 
 import curriculumRoutes from './routes/curriculumRoutes.js' ;
 import prefixRoutes from './routes/prefixRoutes.js' ;

@@ -6,11 +6,10 @@ const rt = express.Router();
 // POST route for marking attendance in student_list
 rt.post('/', async (req, res) => {
     try {
-        const { student_id, section_id, attendance_date, status} = req.body;
+        const { student_id, section_id, status} = req.body;
         const result = await Controller.insertStdList({
             student_id,
             section_id,
-            attendance_date,
             status
         });
 
@@ -23,9 +22,9 @@ rt.post('/', async (req, res) => {
 
 rt.put('/', async (req, res) => {
     try {
-        const { student_id, section_id, attendance_date, status} = req.body;
+        const { student_id, section_id, status} = req.body;
 
-        const result = await Controller.updateStdList(student_id, section_id, attendance_date, {
+        const result = await Controller.updateStdList(student_id, section_id, {
             status
         });
 
