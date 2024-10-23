@@ -20,16 +20,8 @@ app.get('/buttons' , (req , res)=>{
     res.render('buttons');
 });
 
-app.get('/charts' , (req , res)=>{
-    res.render('charts');
-});
-
-app.get('/forgot-password' , (req , res)=>{
-    res.render('forgot-password');
-});
-
-app.get('/login' , (req , res)=>{
-    res.render('login');
+app.get('/checker' , (req , res)=>{
+    res.render('checker');
 });
  
 app.get('/register' , (req , res)=>{

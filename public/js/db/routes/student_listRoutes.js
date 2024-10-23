@@ -3,6 +3,18 @@ import Controller from '../controllers/student_listController.js';
 
 const rt = express.Router();
 
+
+// GET route to retrieve all attendance records
+rt.get('/', async (req, res) => {
+    try {
+        const STDlIST = await Controller.getStdList();
+        return res.status(200).json({ status: '200', result:STDlIST });
+    } catch (error) {
+        console.error('Error fetching attendance records:', error);
+        return res.status(500).json({ status: '500', result: 'Server Error '});
+    }
+});
+
 // POST route for marking attendance in student_list
 rt.post('/', async (req, res) => {
     try {
@@ -20,13 +32,12 @@ rt.post('/', async (req, res) => {
     }
 });
 
-rt.put('/', async (req, res) => {
+rt.put('/:id', async (req, res) => {
+    const { id } = req.params;
     try {
-        const { student_id, section_id, status} = req.body;
+        const { student_id, section_id, status ,active_date} = req.body;
 
-        const result = await Controller.updateStdList(student_id, section_id, {
-            status
-        });
+        const result = await Controller.updateStdList(id,student_id, section_id,active_date, status);
 
         if (result.error) {
             return res.status(400).json({ status: '400', message: result.error });
@@ -39,15 +50,6 @@ rt.put('/', async (req, res) => {
     }
 });
 
-// GET route to retrieve all attendance records
-rt.get('/', async (req, res) => {
-    try {
-        const attendanceRecords = await Controller.getStdList();
-        return res.status(200).json({ status: '200', result: attendanceRecords });
-    } catch (error) {
-        console.error('Error fetching attendance records:', error);
-        return res.status(500).json({ status: '500', result: 'Server Error '});
-    }
-});
+
 
 export default rt;

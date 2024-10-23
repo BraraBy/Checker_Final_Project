@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Checker - Tables</title>
+    <title>Checker - Checker</title>
 
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -36,8 +36,10 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">DataTables</h1>
-                    <p class="mb-4">Show all students list.</p>
+                    <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+                    <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
+                        For more information about DataTables, please visit the <a target="_blank"
+                            href="https://datatables.net">official DataTables documentation</a>.</p>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -51,16 +53,34 @@
                             <!-- script -->
                             <script>
                                 const grid = new gridjs.Grid({
-                                    columns: ['ID', 'Student ID', 'First Name', 'Last Name', 'Section', 'Status', 'Active Date'],
+                                    columns: [
+                                        'ID', 
+                                        'Student ID', 
+                                        'First Name', 
+                                        'Last Name', 
+                                        'Section', 
+                                        'Status', 
+                                        'Active Date', 
+                                        {
+                                            name: 'Actions',
+                                            formatter: (cell, row) => {
+                                                return gridjs.h('button', {
+                                                    className: 'py-2 px-4 border rounded-md text-white bg-green-900',
+                                                    onClick: () => alert(`Editing "${row.cells[0].data}" "${row.cells[1].data}"`)
+                                                }, 'Edit');
+                                            }
+                                        }
+                                    ],
                                     style: { 
                                         table: { 
-                                        'white-space': 'nowrap' ,
+                                            'white-space': 'nowrap',
                                         }
                                     },
                                     search: true,
                                     sort: true,
                                     resizable: true,
                                     pagination: true,
+                                    
                                     server: {
                                         url: 'http://localhost:3100/api/student_list',
                                         then: result => result.result.map(student_list => [
@@ -71,7 +91,7 @@
                                         student_list.section_id, 
                                         student_list.status,
                                         student_list.active_date  
-                                        ]),
+                                        ])
                                     }
                                 }).render(document.getElementById("dataTable")); //render id wrapper:
                             </script>
