@@ -15,6 +15,19 @@ const getAllStd = async () => {
   }
 };
 
+const getTotal = async () => {
+  const client = await postgres.connect();
+  try {
+    result = await client.query('select count(id) from student');
+    return result.rows;
+  } catch (err) {
+    console.error('Error to get all Students :', err);
+    throw err;
+  } finally {
+    client.release();
+  }
+};
+
 const getStdById = async (id) => {
   const client = await postgres.connect();
   try {
@@ -128,4 +141,5 @@ export default {
   createStd,
   updateStd,
   deleteStd,
+  getTotal
 };

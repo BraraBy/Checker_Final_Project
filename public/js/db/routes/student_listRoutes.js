@@ -35,7 +35,8 @@ rt.get('/', async (req, res) => {
 rt.post('/', async (req, res) => {
     try {
         const attendanceDataRaw = req.body.attendanceData;
-
+        console.log("test",attendanceDataRaw);
+        
         // ตรวจสอบว่ามีข้อมูลที่ถูกส่งมา
         if (!attendanceDataRaw) {
             return res.status(400).json({ status: '400', message: 'No attendance data provided' });
@@ -48,6 +49,7 @@ rt.post('/', async (req, res) => {
         } catch (parseError) {
             return res.status(400).json({ status: '400', message: 'Invalid JSON format' });
         }
+        console.log("TESTTTT",attendanceData);
         
         await Controller.insertStdList(attendanceData);
 

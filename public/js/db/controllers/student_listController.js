@@ -26,8 +26,8 @@ const insertStdList = async (attendanceData) => {
 
             // บันทึกข้อมูลเช็คชื่อในฐานข้อมูล
             await client.query(
-                `INSERT INTO student_list (student_id, , status)
-                 VALUES ($1, $2);`,
+                `INSERT INTO student_list (student_id, status , section_id)
+                 VALUES ($1, $2 , 2);`,
                 [student_id, status]
             );
         }
@@ -48,7 +48,7 @@ const updateStdList = async (id,student_id, section_id,active_date, status) => {
              SET status = $5
              WHERE id = $1 AND student_id = $2 AND section_id = $3 AND active_date = $4 RETURNING *`,
             [id,student_id, section_id,active_date, status]
-        );
+        ); 
 
         if (result.rows.length === 0) {
             return { error: 'No matching record found.' };
@@ -77,8 +77,10 @@ const getStdList = async () => {
     }
 };
 
+
+
 export default { 
     insertStdList, 
     updateStdList, 
-    getStdList 
+    getStdList,
 };

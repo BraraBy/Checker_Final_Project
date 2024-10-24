@@ -48,6 +48,18 @@
                               <!-- แทนที่ตรงนี้ -->
                             <div id="dataTable"></div>
 
+                            
+                        
+                            <!-- Optional: ปุ่ม Submit ทั้งหมด -->
+                            <form id="attendanceForm" action='http://localhost:3100/api/student_list' method="POST">
+                                <input type="hidden" id="attendanceDataInput" name="attendanceData">
+                                <button class="btn btn-success btn-icon-split" type="submit">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span class="text">Submit All Attendance</span>
+                                </button>
+                            </form>
                             <script>
                                 const grid = new gridjs.Grid({
                                     columns: [
@@ -147,17 +159,6 @@
                                     this.submit();
                                 });
                             </script>
-                        
-                            <!-- Optional: ปุ่ม Submit ทั้งหมด -->
-                            <form id="attendanceForm" action='http://localhost:3100/api/student_list' method="POST">
-                                <input type="hidden" id="attendanceDataInput" name="attendanceData">
-                                <button class="btn btn-success btn-icon-split" type="submit">
-                                    <span class="icon text-white-50">
-                                        <i class="fas fa-check"></i>
-                                    </span>
-                                    <span class="text">Submit All Attendance</span>
-                                </button>
-                            </form>
                         </div>
                     </div>
                 <!-- /.container-fluid -->
