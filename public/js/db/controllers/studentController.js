@@ -96,16 +96,31 @@ const createStd = async (data) => {
 
 // Update Student
 const updateStd = async (id, data) => {
-    const { prefix_id, first_name, last_name, date_of_birth, sex, curriculum_id, previous_school, address, telephone, email, line_id, status } = data;
+    const { prefix_name, first_name, last_name, date_of_birth, sex, curriculum_name, previous_school, address, telephone, email, line_id, status } = data;
     const client = await postgres.connect();
     try {
+      const curriculum = await client.query(
+        `SELECT id FROM curriculum WHERE short_name_th = $1 LIMIT 1;`,
+        [curriculum_name]
+      );
+
+      const prefix = await client.query(
+        `SELECT id FROM prefix WHERE name = $1 LIMIT 1;`,
+        [prefix_name]
+      );
+
+      let curriculum_id = curriculum.rows[0].id;
+      
+      let prefix_id = prefix.rows[0].id;
+      
       const result = await client.query(
           `UPDATE student
                SET prefix_id = $1, first_name = $2, last_name = $3, date_of_birth = $4, sex = $5, curriculum_id = $6, previous_school = $7, address = $8, telephone = $9, email = $10, line_id = $11, status = $12
-               WHERE id = $13 
+               WHERE student.id = $13
                RETURNING *;`,
           [prefix_id, first_name, last_name, date_of_birth, sex, curriculum_id, previous_school, address, telephone, email, line_id, status, id]
       );
+      
       return result.rows;
     } catch (err) {
       console.error(`Error updating Student at ID ${id}:`, err);

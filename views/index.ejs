@@ -28,168 +28,330 @@
 
 <body id="page-top">
     <%- include('header.ejs') %>
-                <!-- End of Topbar -->
+        <!-- End of Topbar -->
 
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
 
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                    </div>
+            <!-- Page Heading -->
+            <div class="d-sm-flex align-items-center mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+            </div>
 
-                    <!-- Content Row -->
-                    <div class="row">
+            <!-- Content Row -->
+            <div class="row">
 
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            Total Student</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= total %></div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">1234</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                                Absent Students</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Students Requesting Absence</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Content Row -->
-
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Students</h6>
-                        </div>
+                <!-- Earnings (Monthly) Card Example -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
                         <div class="card-body">
-                              <!-- แทนที่ตรงนี้ -->
-                            <div id="dataTable"></div>
-
-                            <!-- script -->
-                            <script>
-                                const grid = new gridjs.Grid({
-                                    columns: [
-                                        'Student ID', 
-                                        'Prefix',
-                                        'First Name', 
-                                        'Last Name', 
-                                        'Date of Birth', 
-                                        'Curriculum' ,
-                                        'Sex', 
-                                        'Previous School',
-                                        'Address' ,
-                                        'Telephone',
-                                        'Email' ,
-                                        'Line ID' ,
-                                        'Status' , 
-                                        {
-                                            name: 'Actions',
-                                            formatter: (cell, row) => {
-                                                return gridjs.h('button', {
-                                                    className: 'py-2 px-4 border rounded-md text-black bg-blue-800',
-                                                    onClick: () => alert(`Editing "${row.cells[0].data}" "${row.cells[1].data}"`)
-                                                }, 'Edit');
-                                            }
-                                        }
-                                    ],
-                                    style: { 
-                                        table: { 
-                                            'white-space': 'nowrap',
-                                        }
-                                    },
-                                    search: true,
-                                    sort: true,
-                                    resizable: true,
-                                    pagination: true,
-                                    
-                                    server: {
-                                        url: 'http://localhost:3100/api/student',
-                                        then: result => result.result.map(student => [
-                                        student.id, 
-                                        student.name, 
-                                        student.first_name,
-                                        student.last_name,
-                                        student.date_of_birth, 
-                                        student.short_name_th,
-                                        student.sex,
-                                        student.previous_school,
-                                        student.address ,
-                                        student.telephone ,
-                                        student.email ,
-                                        student.line_id,
-                                        student.status  
-                                        ])
-                                    }
-                                }).render(document.getElementById("dataTable")); //render id wrapper:
-                            </script>
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Total Student</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><%= total %></div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-
                     </div>
                 </div>
 
-            <!-- Footer -->
-                <%- include('footer.ejs') %>
-            <!-- End of Footer -->
+                <!-- Earnings (Monthly) Card Example -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                        Total</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">1234</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Earnings (Monthly) Card Example -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                        Absent Students</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Requests Card Example -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-warning shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                        Students Requesting Absence</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Row -->
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Students</h6>
+                </div>
+                <div class="card-body">
+                        <!-- แทนที่ตรงนี้ -->
+                    <div id="dataTable"></div>
+
+                    <!-- script -->
+                    <script>
+                        const grid = new gridjs.Grid({
+                            columns: [
+                                'Student ID', 
+                                'Prefix',
+                                'First Name', 
+                                'Last Name', 
+                                'Date of Birth', 
+                                'Curriculum' ,
+                                'Sex', 
+                                'Previous School',
+                                'Address' ,
+                                'Telephone',
+                                'Email' ,
+                                'Line ID' ,
+                                'Status' , 
+                                {
+                                    name: 'Actions',
+                                    formatter: (cell, row) => {
+                                        return gridjs.h('button', {
+                                            className: 'btn btn-primary',
+                                            onClick: () => {
+                                                // Open the modal
+                                                $('#exampleModal').modal('show');
+
+                                                // Fill in the form with data from the row
+                                                document.getElementById('inputId').value = row.cells[0].data;  // Student ID
+                                                document.getElementById('inputPrefix').value = row.cells[1].data;  // Prefix
+                                                document.getElementById('inputFirstName').value = row.cells[2].data;  // First Name
+                                                document.getElementById('inputLastName').value = row.cells[3].data;  // Last Name
+                                                document.getElementById('inputDateOfBirth').value = row.cells[4].data;  // Date of Birth
+                                                document.getElementById('inputCurriculumn').value = row.cells[5].data;  // Curriculum
+                                                document.getElementById('inputSex').value = row.cells[6].data;  // Sex
+                                                document.getElementById('inputPreviousSchoo').value = row.cells[7].data;  // Previous School
+                                                document.getElementById('inputAddress').value = row.cells[8].data;  // Address
+                                                document.getElementById('inputTelephone').value = row.cells[9].data;  // Telephone
+                                                document.getElementById('inputEmail').value = row.cells[10].data;  // Email
+                                                document.getElementById('inputLineID').value = row.cells[11].data;  // Line ID
+                                                document.getElementById('inputStatus').value = row.cells[12].data;  // Status
+
+                                                // Handle the Save changes button click
+                                                document.getElementById('saveChanges').onclick = async () => {
+                                                    const updatedData = {
+                                                        id: row.cells[0].data, 
+                                                        prefix_name: document.getElementById('inputPrefix').value,
+                                                        first_name: document.getElementById('inputFirstName').value,
+                                                        last_name: document.getElementById('inputLastName').value,
+                                                        date_of_birth: document.getElementById('inputDateOfBirth').value,
+                                                        curriculum_name: document.getElementById('inputCurriculumn').value,
+                                                        sex: document.getElementById('inputSex').value,
+                                                        previous_school: document.getElementById('inputPreviousSchoo').value,
+                                                        address: document.getElementById('inputAddress').value,
+                                                        telephone: document.getElementById('inputTelephone').value,
+                                                        email: document.getElementById('inputEmail').value,
+                                                        line_id: document.getElementById('inputLineID').value,
+                                                        status: document.getElementById('inputStatus').value
+                                                    };
+
+                                                    try {
+                                                        console.log(JSON.stringify(updatedData));
+                                                        
+                                                        const response = await fetch(`http://localhost:3100/api/student/${updatedData.id}`, {
+                                                            method: 'PUT',
+                                                            headers: {
+                                                                'Content-Type': 'application/json',
+                                                            },
+                                                            body: JSON.stringify(updatedData)
+                                                        });
+
+                                                        if (response.ok) {
+                                                            alert('Student updated successfully');
+                                                            $('#exampleModal').modal('hide'); // Close the modal
+                                                            grid.forceRender(); // Refresh the grid to show updated data
+                                                        } else {
+                                                            alert('Error updating student');
+                                                        }
+                                                    } catch (error) {
+                                                        alert('Error updating student');
+                                                    }
+                                                };
+                                            }
+                                        }, 'Edit');
+                                    }
+                                }
+                            ],
+                            style: { 
+                                table: { 
+                                    'white-space': 'nowrap',
+                                }
+                            },
+                            search: true,
+                            sort: true,
+                            resizable: true,
+                            pagination: true,
+                            
+                            server: {
+                                url: 'http://localhost:3100/api/student',
+                                then: result => result.result.map(student => [
+                                student.id, 
+                                student.name, 
+                                student.first_name,
+                                student.last_name,
+                                student.date_of_birth, 
+                                student.short_name_th,
+                                student.sex,
+                                student.previous_school,
+                                student.address ,
+                                student.telephone ,
+                                student.email ,
+                                student.line_id,
+                                student.status,
+                                gridjs.html(`
+                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                    Edit
+                                </button>   
+                                `)
+                                ])
+                            }
+                        }).render(document.getElementById("dataTable")); //render id wrapper:
+                    </script>
+                </div>
+            </div>
+
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Student</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Student ID</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputId" placeholder="Student ID">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Prefix</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputPrefix" placeholder="Prefix">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">First Name</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputFirstName" placeholder="First Name">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Last Name</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputLastName" placeholder="Last Name">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Date of Birth</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputDateOfBirth" placeholder="Date of Birth">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Curriculum</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputCurriculumn" placeholder="Curriculum">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Sex</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputSex" placeholder="Sex">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Previous School</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputPreviousSchoo" placeholder="Previous School">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Address</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputAddress" placeholder="Address">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Telephone</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputTelephone" placeholder="Telephone">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Email</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputEmail" placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Line ID</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputLineID" placeholder="Line ID">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Status</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputStatus" placeholder="Status">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+    <!-- Footer -->
+        <%- include('footer.ejs') %>
+    <!-- End of Footer -->
 
         </div>
         <!-- End of Content Wrapper -->

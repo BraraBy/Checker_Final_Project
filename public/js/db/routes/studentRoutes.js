@@ -76,6 +76,8 @@ rt.put('/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const info = await Controller.updateStd(id, req.body);
+    console.log(id,req.body);
+    
     res.status(200).json({ status: '200', result: info });
   } catch (err) {
     res.status(500).json({ status: '500', result: 'Server Error' });

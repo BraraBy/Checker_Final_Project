@@ -50,7 +50,6 @@ rt.post('/', async (req, res) => {
             return res.status(400).json({ status: '400', message: 'Invalid JSON format' });
         }
         console.log("TESTTTT",attendanceData);
-        
         await Controller.insertStdList(attendanceData);
 
         return res.status(200).json({ status: '200', message: 'Attendance recorded successfully' });
