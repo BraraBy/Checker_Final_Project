@@ -5,7 +5,7 @@ let result = '';
 const getAllStd = async () => {
   const client = await postgres.connect();
   try {
-    result = await client.query('SELECT * FROM student;');
+    result = await client.query('SELECT student.id , prefix.name ,student.first_name , student.last_name ,student.date_of_birth, curriculum.short_name_th , student.sex , student.previous_school , student.address , student.telephone , student.email , student.line_id , student.status FROM student JOIN prefix ON student.prefix_id = prefix.id JOIN curriculum ON student.curriculum_id = curriculum.id');
     return result.rows;
   } catch (err) {
     console.error('Error to get all Students :', err);
@@ -119,6 +119,7 @@ const deleteStd = async (id) => {
   }
 };
 
+
 export default {
   getAllStd,
   getStdById,
@@ -126,5 +127,5 @@ export default {
   checkStdName,
   createStd,
   updateStd,
-  deleteStd
+  deleteStd,
 };

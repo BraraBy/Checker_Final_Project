@@ -1,15 +1,36 @@
 import postgres from '../utils/db.js';
 
-const insertStdList = async ({ student_id, section_id, status}) => {
+// const insertStdList = async ({ student_id, section_id, status}) => {
+//     const client = await postgres.connect();
+//     try {
+//         const result = await client.query(
+//             `INSERT INTO student_list (student_id, section_id,status)
+//              VALUES ($1, $2, $3)
+//              RETURNING *;`,
+//             [student_id, section_id, status]
+//         );
+//         return result.rows[0];
+//     } catch (err) {
+//         console.error('Error to Insert :', err);
+//         throw err;
+//     } finally {
+//         client.release();
+//     }
+// };
+
+const insertStdList = async (attendanceData) => {
     const client = await postgres.connect();
     try {
-        const result = await client.query(
-            `INSERT INTO student_list (student_id, section_id,status)
-             VALUES ($1, $2, $3)
-             RETURNING *;`,
-            [student_id, section_id, status]
-        );
-        return result.rows[0];
+        for (let record of attendanceData) {
+            const { student_id,status } = record;
+
+            // บันทึกข้อมูลเช็คชื่อในฐานข้อมูล
+            await client.query(
+                `INSERT INTO student_list (student_id, , status)
+                 VALUES ($1, $2);`,
+                [student_id, status]
+            );
+        }
     } catch (err) {
         console.error('Error to Insert :', err);
         throw err;

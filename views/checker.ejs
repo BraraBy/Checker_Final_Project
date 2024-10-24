@@ -36,10 +36,8 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Tables</h1>
-                    <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
-                        For more information about DataTables, please visit the <a target="_blank"
-                            href="https://datatables.net">official DataTables documentation</a>.</p>
+                    <h1 class="h3 mb-2 text-gray-800">Check-in</h1>
+                    <p class="mb-4">Check-in Students.</p>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -50,58 +48,121 @@
                               <!-- แทนที่ตรงนี้ -->
                             <div id="dataTable"></div>
 
-                            <!-- script -->
                             <script>
                                 const grid = new gridjs.Grid({
                                     columns: [
-                                        'ID', 
                                         'Student ID', 
                                         'First Name', 
                                         'Last Name', 
-                                        'Section', 
                                         'Status', 
-                                        'Active Date', 
                                         {
-                                            name: 'Actions',
+                                            name: 'Attendance',
                                             formatter: (cell, row) => {
-                                                return gridjs.h('button', {
-                                                    className: 'py-2 px-4 border rounded-md text-white bg-green-900',
-                                                    onClick: () => alert(`Editing "${row.cells[0].data}" "${row.cells[1].data}"`)
-                                                }, 'Edit');
+                                                // ฟอร์มเช็คชื่อในคอลัมน์ 'Attendance'
+                                                return gridjs.h('form', { action: '/student_list', method: 'POST' }, [
+                                                    gridjs.h('input', {
+                                                        type: 'hidden',
+                                                        name: 'student_id',
+                                                        value: row.cells[0].data
+                                                    }),
+                                                    gridjs.h('label', { style: 'display: inline-block; margin-right: 30px;' }, [
+                                                        gridjs.h('input', {
+                                                            type: 'radio',
+                                                            name: 'attendance_' + row.cells[0].data,
+                                                            value: 'present',
+                                                            required: true ,
+                                                            style: 'margin-right: 5px;'
+                                                        }),
+                                                        'Present',
+                                                    ]),
+                                                    gridjs.h('label', { style: 'display: inline-block; margin-right: 30px;' }, [
+                                                        gridjs.h('input', {
+                                                            type: 'radio',
+                                                            name: 'attendance_' + row.cells[0].data,
+                                                            value: 'absent',
+                                                            required: true ,
+                                                            style: 'margin-right: 5px;'
+                                                        }),
+                                                        'Absent',
+                                                    ]),
+                                                    gridjs.h('label', { style: 'display: inline-block; margin-right: 30px;' }, [
+                                                        gridjs.h('input', {
+                                                            type: 'radio',
+                                                            name: 'attendance_' + row.cells[0].data,
+                                                            value: 'late' ,
+                                                            required: true ,
+                                                            style: 'margin-right: 5px;'
+                                                        }),
+                                                        'Late'
+                                                    ])
+                                                ]);
                                             }
-                                        }
+                                        },
                                     ],
                                     style: { 
                                         table: { 
                                             'white-space': 'nowrap',
-                                        }
+                                        },
                                     },
                                     search: true,
                                     sort: true,
                                     resizable: true,
                                     pagination: true,
-                                    
                                     server: {
-                                        url: 'http://localhost:3100/api/student_list',
-                                        then: result => result.result.map(student_list => [
-                                        student_list.id, 
-                                        student_list.student_id, 
-                                        student_list.first_name,
-                                        student_list.last_name,
-                                        student_list.section_id, 
-                                        student_list.status,
-                                        student_list.active_date  
+                                        url: 'http://localhost:3100/api/student',
+                                        then: result => result.result.map(student => [
+                                            student.id, 
+                                            student.first_name,
+                                            student.last_name,
+                                            student.status,
                                         ])
                                     }
-                                }).render(document.getElementById("dataTable")); //render id wrapper:
+                                }).render(document.getElementById("dataTable")); //render id wrapper
+
+                                document.getElementById('attendanceForm').addEventListener('submit', function(e) {
+                                    e.preventDefault(); // ป้องกันการส่งฟอร์มแบบปกติ
+
+                                    const attendanceData = [];
+
+                                    // ดึงค่าจาก radio buttons ที่เลือกใน gridjs
+                                    document.querySelectorAll('input[type=radio]:checked').forEach(radio => {
+                                        const student_id = radio.name.split('_')[1]; // ดึง studentId จากชื่อของ radio
+                                        const status = radio.value; // ดึงค่าเช็คชื่อที่เลือก
+
+                                        attendanceData.push({ student_id, status });
+                                    });
+
+                                    if (attendanceData.length === 0) {
+                                        alert("กรุณาเลือกสถานะการเช็คชื่อของนักเรียนทุกคน");
+                                        return;
+                                    }
+
+                                    // ใส่ข้อมูลเช็คชื่อใน hidden input ก่อนส่งฟอร์ม
+                                    document.getElementById('attendanceDataInput').value = JSON.stringify(attendanceData);
+
+                                        // ตรวจสอบค่าที่จะส่งไปยัง backend
+                                    console.log("Data to be submitted:", attendanceData);
+
+                                    // ส่งฟอร์มแบบปกติ
+                                    this.submit();
+                                });
                             </script>
+                        
+                            <!-- Optional: ปุ่ม Submit ทั้งหมด -->
+                            <form id="attendanceForm" action='http://localhost:3100/api/student_list' method="POST">
+                                <input type="hidden" id="attendanceDataInput" name="attendanceData">
+                                <button class="btn btn-success btn-icon-split" type="submit">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span class="text">Submit All Attendance</span>
+                                </button>
+                            </form>
                         </div>
                     </div>
-
-                </div>
                 <!-- /.container-fluid -->
 
-            </div>
+                </div>
             <!-- End of Main Content -->
                 <%- include('footer.ejs') %>
 
