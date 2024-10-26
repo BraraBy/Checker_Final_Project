@@ -16,6 +16,10 @@ app.get('/' , (req , res)=>{
     res.render('login');
 });
 
+app.get('/login' , (req , res)=>{
+    res.render('login');
+});
+
 app.get('/index' , async (req , res)=>{
     const total = await getTotal();
     res.render('index', {total});
