@@ -49,9 +49,9 @@
                             <div id="dataTable"></div>
 
                             
-                        
+
                             <!-- Optional: ปุ่ม Submit ทั้งหมด -->
-                            <form id="attendanceForm" action='http://localhost:3100/api/student_list' method="POST">
+                            <form id="attendanceForm">
                                 <input type="hidden" id="attendanceDataInput" name="attendanceData">
                                 <button class="btn btn-success btn-icon-split" type="submit">
                                     <span class="icon text-white-50">
@@ -130,7 +130,7 @@
                                         ])
                                     }
                                 }).render(document.getElementById("dataTable")); //render id wrapper
-
+                                
                                 document.getElementById('attendanceForm').addEventListener('submit', function(e) {
                                     e.preventDefault(); // ป้องกันการส่งฟอร์มแบบปกติ
 
@@ -149,14 +149,32 @@
                                         return;
                                     }
 
-                                    // ใส่ข้อมูลเช็คชื่อใน hidden input ก่อนส่งฟอร์ม
-                                    document.getElementById('attendanceDataInput').value = JSON.stringify(attendanceData);
-
-                                        // ตรวจสอบค่าที่จะส่งไปยัง backend
+                                    // ตรวจสอบค่าที่จะส่งไปยัง backend
                                     console.log("Data to be submitted:", attendanceData);
 
-                                    // ส่งฟอร์มแบบปกติ
-                                    this.submit();
+                                    // ส่งข้อมูลไปยัง backend ด้วย fetch
+                                    fetch('http://localhost:3100/api/student_list', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json' // กำหนด Content-Type เป็น JSON
+                                        },
+                                        body: JSON.stringify({ attendanceData }) // แปลงข้อมูลเป็น JSON
+                                    })
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error('Network response was not ok');
+                                        }
+                                        return response.json(); // แปลงการตอบกลับเป็น JSON
+                                    })
+                                    .then(data => {
+                                        console.log('Success:', data); // ทำการจัดการข้อมูลที่ได้รับ
+                                        // แสดงข้อความสำเร็จหรือทำสิ่งอื่นๆ ที่ต้องการ เช่น แจ้งเตือนผู้ใช้
+                                        alert("เช็คชื่อสำเร็จ!");
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error); // จัดการกับข้อผิดพลาด
+                                        alert("เกิดข้อผิดพลาดในการเช็คชื่อ กรุณาลองใหม่อีกครั้ง");
+                                    });
                                 });
                             </script>
                         </div>

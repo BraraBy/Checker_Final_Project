@@ -15,50 +15,29 @@ rt.get('/', async (req, res) => {
     }
 });
 
-// POST route for marking attendance in student_list
-// rt.post('/', async (req, res) => {
-//     try {
-//         const { student_id, section_id, status} = req.body;
-//         const result = await Controller.insertStdList({
-//             student_id,
-//             section_id,
-//             status
-//         });
-
-//         return res.status(200).json({ status: '200', result });
-//     } catch (error) {
-//         console.error('Error :', error);
-//         return res.status(500).json({ status: '500', message: 'Server Error' });
-//     }
-// });
-
 rt.post('/', async (req, res) => {
     try {
-        const attendanceDataRaw = req.body.attendanceData;
-        console.log("test",attendanceDataRaw);
-        
         // ตรวจสอบว่ามีข้อมูลที่ถูกส่งมา
-        if (!attendanceDataRaw) {
+        const attendanceData = req.body.attendanceData; // แก้ไขที่นี่
+        console.log("Received attendance data:", attendanceData);
+        
+        if (!attendanceData) {
             return res.status(400).json({ status: '400', message: 'No attendance data provided' });
         }
 
-        // แปลง JSON เป็น object
-        let attendanceData;
-        try {
-            attendanceData = JSON.parse(attendanceDataRaw);
-        } catch (parseError) {
-            return res.status(400).json({ status: '400', message: 'Invalid JSON format' });
+        // ตรวจสอบว่าข้อมูลที่รับมาเป็น array
+        if (!Array.isArray(attendanceData)) {
+            return res.status(400).json({ status: '400', message: 'Attendance data must be an array' });
         }
-        console.log("TESTTTT",attendanceData);
+
         await Controller.insertStdList(attendanceData);
 
         return res.status(200).json({ status: '200', message: 'Attendance recorded successfully' });
     } catch (error) {
-        console.error('Error :', error);
+        console.error('Error:', error);
         return res.status(500).json({ status: '500', message: 'Server Error' });
     }
 });
-
 
 
 
@@ -69,6 +48,11 @@ rt.put('/:id', async (req, res) => {
 
         const result = await Controller.updateStdList(id,student_id, section_id,active_date, status);
 
+        if (!student_id || !section_id || !status || !active_date) {
+            return res.status(400).json({ status: '400', message: 'Missing required fields' });
+        }
+        
+
         if (result.error) {
             return res.status(400).json({ status: '400', message: result.error });
         }
@@ -77,6 +61,19 @@ rt.put('/:id', async (req, res) => {
     } catch (error) {
         console.error('Error to updating :', error);
         return res.status(500).json({ status: '500', message: 'Error to updating ' });
+    }
+});
+
+rt.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+        res.status(400).json({ status:'400', result: 'ID is requires.'})
+    }
+    try{
+        const data = await Controller.deleteStdList(id);
+        res.status(200).json({ status: '200', result: data, desc: 'Deleted completed' });
+    } catch (err){
+        res.status(500).json({ status: '500', result: 'Server Error'});
     }
 });
 

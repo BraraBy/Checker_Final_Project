@@ -13,8 +13,7 @@
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
@@ -31,51 +30,51 @@
         <!-- End of Topbar -->
 
         <!-- Begin Page Content -->
-        <div class="container-fluid">
-
+    <div class="container-fluid">
             <!-- Page Heading -->
-            <div class="d-sm-flex align-items-center mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+        <div class="d-sm-flex align-items-center mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+        </div>
+            <!-- Content Row -->
+        <div class="row">
+
+                <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Total Student
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800"><%= total %>
+                                </div>
+                                </div>
+                            <div class="col-auto">
+                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Content Row -->
-            <div class="row">
-
                 <!-- Earnings (Monthly) Card Example -->
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-primary shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    Total Student</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><%= total %></div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Earnings (Monthly) Card Example -->
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-success shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+             <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                         Total</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">1234</div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">1234</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
                 <!-- Earnings (Monthly) Card Example -->
                 <div class="col-xl-3 col-md-6 mb-4">
@@ -133,80 +132,166 @@
                                 'First Name', 
                                 'Last Name', 
                                 'Date of Birth', 
-                                'Curriculum' ,
+                                'Curriculum',
                                 'Sex', 
                                 'Previous School',
-                                'Address' ,
+                                'Address',
                                 'Telephone',
-                                'Email' ,
-                                'Line ID' ,
-                                'Status' , 
+                                'Email',
+                                'Line ID',
+                                'Status',
                                 {
                                     name: 'Actions',
                                     formatter: (cell, row) => {
-                                        return gridjs.h('button', {
-                                            className: 'btn btn-primary',
-                                            onClick: () => {
-                                                // Open the modal
-                                                $('#exampleModal').modal('show');
-
-                                                // Fill in the form with data from the row
-                                                document.getElementById('inputId').value = row.cells[0].data;  // Student ID
-                                                document.getElementById('inputPrefix').value = row.cells[1].data;  // Prefix
-                                                document.getElementById('inputFirstName').value = row.cells[2].data;  // First Name
-                                                document.getElementById('inputLastName').value = row.cells[3].data;  // Last Name
-                                                document.getElementById('inputDateOfBirth').value = row.cells[4].data;  // Date of Birth
-                                                document.getElementById('inputCurriculumn').value = row.cells[5].data;  // Curriculum
-                                                document.getElementById('inputSex').value = row.cells[6].data;  // Sex
-                                                document.getElementById('inputPreviousSchoo').value = row.cells[7].data;  // Previous School
-                                                document.getElementById('inputAddress').value = row.cells[8].data;  // Address
-                                                document.getElementById('inputTelephone').value = row.cells[9].data;  // Telephone
-                                                document.getElementById('inputEmail').value = row.cells[10].data;  // Email
-                                                document.getElementById('inputLineID').value = row.cells[11].data;  // Line ID
-                                                document.getElementById('inputStatus').value = row.cells[12].data;  // Status
-
-                                                // Handle the Save changes button click
-                                                document.getElementById('saveChanges').onclick = async () => {
-                                                    const updatedData = {
-                                                        id: row.cells[0].data, 
-                                                        prefix_name: document.getElementById('inputPrefix').value,
-                                                        first_name: document.getElementById('inputFirstName').value,
-                                                        last_name: document.getElementById('inputLastName').value,
-                                                        date_of_birth: document.getElementById('inputDateOfBirth').value,
-                                                        curriculum_name: document.getElementById('inputCurriculumn').value,
-                                                        sex: document.getElementById('inputSex').value,
-                                                        previous_school: document.getElementById('inputPreviousSchoo').value,
-                                                        address: document.getElementById('inputAddress').value,
-                                                        telephone: document.getElementById('inputTelephone').value,
-                                                        email: document.getElementById('inputEmail').value,
-                                                        line_id: document.getElementById('inputLineID').value,
-                                                        status: document.getElementById('inputStatus').value
-                                                    };
-
-                                                    try {
-                                                        console.log(JSON.stringify(updatedData));
-                                                        
-                                                        const response = await fetch(`http://localhost:3100/api/student/${updatedData.id}`, {
-                                                            method: 'PUT',
-                                                            headers: {
-                                                                'Content-Type': 'application/json',
-                                                            },
-                                                            body: JSON.stringify(updatedData)
-                                                        });
-
-                                                        if (response.ok) {
-                                                            alert('Student updated successfully');
-                                                            $('#exampleModal').modal('hide'); // Close the modal
-                                                            grid.forceRender(); // Refresh the grid to show updated data
-                                                        } else {
+                                        const isExistingStudent = row.cells[0].data !== ""; // ตรวจสอบว่า Student ID มีหรือไม่
+                        
+                                        return gridjs.h('div', {}, [
+                                            isExistingStudent ? 
+                                            // ปุ่ม Edit สำหรับนักเรียนที่มีอยู่แล้ว
+                                            gridjs.h('button', {
+                                                className: 'btn btn-primary mr-2',
+                                                onClick: () => {
+                                                    $('#exampleModal').modal('show');
+                                                    document.getElementById('exampleModalLabel').textContent = 'Edit Student';
+                                                    document.getElementById('inputId').value = row.cells[0].data;
+                                                    document.getElementById('inputPrefix').value = row.cells[1].data;
+                                                    document.getElementById('inputFirstName').value = row.cells[2].data;
+                                                    document.getElementById('inputLastName').value = row.cells[3].data;
+                                                    document.getElementById('inputDateOfBirth').value = row.cells[4].data;
+                                                    document.getElementById('inputCurriculumn').value = row.cells[5].data;
+                                                    document.getElementById('inputSex').value = row.cells[6].data;
+                                                    document.getElementById('inputPreviousSchoo').value = row.cells[7].data;
+                                                    document.getElementById('inputAddress').value = row.cells[8].data;
+                                                    document.getElementById('inputTelephone').value = row.cells[9].data;
+                                                    document.getElementById('inputEmail').value = row.cells[10].data;
+                                                    document.getElementById('inputLineID').value = row.cells[11].data;
+                                                    document.getElementById('inputStatus').value = row.cells[12].data;
+                        
+                                                    document.getElementById('saveChanges').onclick = async () => {
+                                                        const updatedData = {
+                                                            id: row.cells[0].data, 
+                                                            prefix_name: document.getElementById('inputPrefix').value,
+                                                            first_name: document.getElementById('inputFirstName').value,
+                                                            last_name: document.getElementById('inputLastName').value,
+                                                            date_of_birth: document.getElementById('inputDateOfBirth').value,
+                                                            curriculum_name: document.getElementById('inputCurriculumn').value,
+                                                            sex: document.getElementById('inputSex').value,
+                                                            previous_school: document.getElementById('inputPreviousSchoo').value,
+                                                            address: document.getElementById('inputAddress').value,
+                                                            telephone: document.getElementById('inputTelephone').value,
+                                                            email: document.getElementById('inputEmail').value,
+                                                            line_id: document.getElementById('inputLineID').value,
+                                                            status: document.getElementById('inputStatus').value
+                                                        };
+                        
+                                                        try {
+                                                            const response = await fetch(`http://localhost:3100/api/student/${updatedData.id}`, {
+                                                                method: 'PUT',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify(updatedData)
+                                                            });
+                        
+                                                            if (response.ok) {
+                                                                alert('Student updated successfully');
+                                                                $('#exampleModal').modal('hide');
+                                                                grid.forceRender();
+                                                            } else {
+                                                                alert('Error updating student');
+                                                            }
+                                                        } catch (error) {
                                                             alert('Error updating student');
                                                         }
-                                                    } catch (error) {
-                                                        alert('Error updating student');
+                                                    };
+                                                }
+                                            }, 'Edit') 
+                                            
+                                            :
+                                            gridjs.h('button', {
+                                            
+                                            // ปุ่ม Add สำหรับแถวใหม่
+                                                className: 'btn btn-success',
+                                                onClick: () => {
+                                                    $('#exampleModal').modal('show');
+                                                    document.getElementById('exampleModalLabel').textContent = 'Add Student';
+                        
+                                                    // เคลียร์ข้อมูลในฟอร์ม
+                                                    document.getElementById('inputId').value = '';
+                                                    document.getElementById('inputPrefix').value = '';
+                                                    document.getElementById('inputFirstName').value = '';
+                                                    document.getElementById('inputLastName').value = '';
+                                                    document.getElementById('inputDateOfBirth').value = '';
+                                                    document.getElementById('inputCurriculumn').value = '';
+                                                    document.getElementById('inputSex').value = '';
+                                                    document.getElementById('inputPreviousSchoo').value = '';
+                                                    document.getElementById('inputAddress').value = '';
+                                                    document.getElementById('inputTelephone').value = '';
+                                                    document.getElementById('inputEmail').value = '';
+                                                    document.getElementById('inputLineID').value = '';
+                                                    document.getElementById('inputStatus').value = '';
+                        
+                                                    document.getElementById('saveChanges').onclick = async () => {
+                                                        const newData = {
+                                                            id: document.getElementById('inputId').value ,
+                                                            prefix_id: document.getElementById('inputPrefix').value,
+                                                            first_name: document.getElementById('inputFirstName').value,
+                                                            last_name: document.getElementById('inputLastName').value,
+                                                            date_of_birth: document.getElementById('inputDateOfBirth').value,
+                                                            curriculum_id: document.getElementById('inputCurriculumn').value,
+                                                            sex: document.getElementById('inputSex').value,
+                                                            previous_school: document.getElementById('inputPreviousSchoo').value,
+                                                            address: document.getElementById('inputAddress').value,
+                                                            telephone: document.getElementById('inputTelephone').value,
+                                                            email: document.getElementById('inputEmail').value,
+                                                            line_id: document.getElementById('inputLineID').value,
+                                                            status: document.getElementById('inputStatus').value
+                                                        };
+                        
+                                                        try {
+                                                            const response = await fetch('http://localhost:3100/api/student', {
+                                                                method: 'POST',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify(newData)
+                                                            });
+                        
+                                                            if (response.ok) {
+                                                                alert('Student added successfully');
+                                                                $('#exampleModal').modal('hide');
+                                                                grid.forceRender();
+                                                            } else {
+                                                                alert('Error adding student');
+                                                            }
+                                                        } catch (error) {
+                                                            alert('Error adding student');
+                                                        }
+                                                    };
+                                                }
+                                            }, 'Add') ,
+
+                                            isExistingStudent ? 
+                                            gridjs.h('button', {
+                                                className: 'btn btn-danger',
+                                                onClick: async () => {
+                                                    const studentId = row.cells[0].data; // รับ Student ID
+                                                    if (confirm(`Are you sure you want to delete student with ID ${studentId}?`)) {
+                                                        try {
+                                                            const response = await fetch(`http://localhost:3100/api/student/${studentId}`, {
+                                                                method: 'DELETE'
+                                                            });
+
+                                                            if (response.ok) {
+                                                                alert('Student deleted successfully');
+                                                                grid.forceRender(); // Refresh the grid
+                                                            } else {
+                                                                alert('Error deleting student');
+                                                            }
+                                                        } catch (error) {
+                                                            alert('Error deleting student');
+                                                        }
                                                     }
-                                                };
-                                            }
-                                        }, 'Edit');
+                                                }
+                                            }, 'Delete') 
+                                            :''
+                                        ]);
                                     }
                                 }
                             ],
@@ -219,38 +304,39 @@
                             sort: true,
                             resizable: true,
                             pagination: true,
-                            
                             server: {
                                 url: 'http://localhost:3100/api/student',
-                                then: result => result.result.map(student => [
-                                student.id, 
-                                student.name, 
-                                student.first_name,
-                                student.last_name,
-                                student.date_of_birth, 
-                                student.short_name_th,
-                                student.sex,
-                                student.previous_school,
-                                student.address ,
-                                student.telephone ,
-                                student.email ,
-                                student.line_id,
-                                student.status,
-                                gridjs.html(`
-                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                                    Edit
-                                </button>   
-                                `)
-                                ])
+                                then: result => {
+                                    const students = result.result.map(student => [
+                                        student.id, 
+                                        student.name, 
+                                        student.first_name,
+                                        student.last_name,
+                                        student.date_of_birth, 
+                                        student.short_name_th,
+                                        student.sex,
+                                        student.previous_school,
+                                        student.address,
+                                        student.telephone,
+                                        student.email,
+                                        student.line_id,
+                                        student.status,
+                                        '' // คอลัมน์ว่างสำหรับปุ่ม Actions
+                                    ]);
+                        
+                                    // เพิ่มแถวเปล่าที่มีปุ่ม Add
+                                    students.push(['', '', '', '', '', '', '', '', '', '', '', '', '', '']);
+                                    return students;
+                                }
                             }
-                        }).render(document.getElementById("dataTable")); //render id wrapper:
-                    </script>
+                        }).render(document.getElementById("dataTable"));
+                        </script>
                 </div>
             </div>
 
             </div>
         </div>
-        <!-- Modal -->
+        <!-- Modal Edit -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
             <div class="modal-content">

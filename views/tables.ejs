@@ -13,8 +13,7 @@
 
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template -->
@@ -34,9 +33,8 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">DataTables</h1>
+                <h1 class="h3 mb-2 text-gray-800">DataTables</h1>
                     <p class="mb-4">Show all students list.</p>
 
                     <!-- DataTales Example -->
@@ -62,10 +60,71 @@
                                         {
                                             name: 'Actions',
                                             formatter: (cell, row) => {
-                                                return gridjs.h('button', {
-                                                    className: 'py-2 px-4 border rounded-md text-black bg-blue-800',
-                                                    onClick: () => alert(`Editing "${row.cells[0].data}" "${row.cells[1].data}"`)
-                                                }, 'Edit');
+                                
+                                                return gridjs.h('div', {}, [
+                                                    gridjs.h('button', {
+                                                        className: 'btn btn-primary mr-2',
+                                                        onClick: () => {
+                                                            $('#exampleModal').modal('show');
+                                                            document.getElementById('inputStatus').value = row.cells[5].data;
+                                                            document.getElementById('saveChanges').onclick = async () => {
+                                                                const updatedData = {
+                                                                    id: row.cells[0].data, 
+                                                                    student_id: row.cells[1].data ,
+                                                                    section_id: row.cells[4].data ,
+                                                                    active_date: row.cells[6].data ,
+                                                                    status: document.getElementById('inputStatus').value,
+                                                                };
+
+                                                                console.log(updatedData);
+                                
+                                                                try {
+                                                                
+                                                                const response = await fetch(`http://localhost:3100/api/student_list/${updatedData.id}`, {
+                                                                    method: 'PUT',
+                                                                    headers: {
+                                                                        'Content-Type': 'application/json',
+                                                                    },
+                                                                    body: JSON.stringify(updatedData)
+                                                                });
+
+                                                                if (response.ok) {
+                                                                    alert('Student updated successfully');
+                                                                    $('#exampleModal').modal('hide'); // Close the modal
+                                                                    grid.forceRender(); // Refresh the grid to show updated data
+                                                                } else {
+                                                                    alert('Error updating student');
+                                                                }
+                                                            } catch (error) {
+                                                                alert('Error updating student');
+                                                            }
+
+                                                            };
+                                                        }
+                                                    }, 'Edit') ,
+                                                    gridjs.h('button', {
+                                                        className: 'btn btn-danger',
+                                                        onClick: async () => {
+                                                            const studentId = row.cells[0].data; // รับ Student ID
+                                                            if (confirm(`Are you sure you want to delete student with ID ${studentId}?`)) {
+                                                                try {
+                                                                    const response = await fetch(`http://localhost:3100/api/student_list/${studentId}`, {
+                                                                        method: 'DELETE'
+                                                                    });
+
+                                                                    if (response.ok) {
+                                                                        alert('Student deleted successfully');
+                                                                        grid.forceRender(); // Refresh the grid
+                                                                    } else {
+                                                                        alert('Error deleting student');
+                                                                    }
+                                                                } catch (error) {
+                                                                    alert('Error deleting student');
+                                                                }
+                                                            }
+                                                        }
+                                                    }, 'Delete') 
+                                                ]);
                                             }
                                         }
                                     ],
@@ -88,7 +147,7 @@
                                         student_list.last_name,
                                         student_list.section_id, 
                                         student_list.status,
-                                        student_list.active_date  
+                                        student_list.active_date ,
                                         ])
                                     }
                                 }).render(document.getElementById("dataTable")); //render id wrapper:
@@ -97,9 +156,32 @@
                     </div>
 
                 </div>
-                <!-- /.container-fluid -->
-
-            </div>
+                <!-- Modal Edit -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Student_List</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Status</label>
+                                <div class="col-sm-10">
+                                  <input type="text" class="form-control" id="inputStatus" placeholder="Status">
+                                </div>
+                            </div>
+        
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
             <!-- End of Main Content -->
                 <%- include('footer.ejs') %>
 
