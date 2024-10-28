@@ -22,7 +22,10 @@ app.get('/login' , (req , res)=>{
 
 app.get('/index' , async (req , res)=>{
     const total = await getTotal();
-    res.render('index', {total});
+    const totalCurr = await getTotalCurr();
+    const totalSec = await getTotalSec();
+    const totalStdList = await getTotalStdList ();
+    res.render('index', {total , totalCurr , totalSec , totalStdList});
 });
 
 app.get('/buttons' , (req , res)=>{
@@ -47,11 +50,43 @@ async function getTotal() {
         const data = await response.json();
         return data.result[0].count; 
     } catch (error) {
-        console.error('Error fetching total:', error);
+        console.error('Error fetching total student:', error);
         return 0;  
     }
 }
 
+async function getTotalCurr() {
+    try {
+        const response = await fetch('http://localhost:3100/api/curriculum/totalCurr');
+        const data = await response.json();
+        return data.result[0].count; 
+    } catch (error) {
+        console.error('Error fetching total curriculum:', error);
+        return 0;  
+    }
+}
+
+async function getTotalSec() {
+    try {
+        const response = await fetch('http://localhost:3100/api/section/totalSec');
+        const data = await response.json();
+        return data.result[0].count; 
+    } catch (error) {
+        console.error('Error fetching total section:', error);
+        return 0;  
+    }
+}
+
+async function getTotalStdList() {
+    try {
+        const response = await fetch('http://localhost:3100/api/student_list/totalStdList');
+        const data = await response.json();
+        return data.result[0].count; 
+    } catch (error) {
+        console.error('Error fetching total student list:', error);
+        return 0;  
+    }
+}
 
 
 const PORT = 3000;

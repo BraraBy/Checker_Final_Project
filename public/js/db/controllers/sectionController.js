@@ -15,6 +15,19 @@ const getAllSec = async () => {
     }
 };
 
+const getTotalSec = async () => {
+    const client = await postgres.connect();
+    try {
+      result = await client.query('select count(id) from section');
+      return result.rows;
+    } catch (err) {
+      console.error('Error to get all Section :', err);
+      throw err;
+    } finally {
+      client.release();
+    }
+  };
+
 const getSecById = async (id) => {
     const client = await postgres.connect();
     try {
@@ -122,5 +135,6 @@ export default {
     updateSec,
     getSecByName,
     checkSec,
-    deleteSec
+    deleteSec,
+    getTotalSec
 };

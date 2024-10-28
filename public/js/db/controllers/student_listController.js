@@ -78,12 +78,25 @@ const deleteStdList = async (id) => {
     }
   };
 
+  const getTotalStdList = async () => {
+    const client = await postgres.connect();
+    try {
+      const result = await client.query('select count(id) from student_list');
+      return result.rows;
+    } catch (err) {
+      console.error('Error to get all Student_list :', err);
+      throw err;
+    } finally {
+      client.release();
+    }
+  };
 
 
 export default { 
     insertStdList, 
     updateStdList, 
     getStdList,
-    deleteStdList
+    deleteStdList,
+    getTotalStdList
 
 };

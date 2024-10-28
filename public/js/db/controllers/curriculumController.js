@@ -15,6 +15,19 @@ const getAllCurr = async () => {
     }
 };
 
+const getTotalCurr = async () => {
+    const client = await postgres.connect();
+    try {
+      result = await client.query('select count(id) from curriculum');
+      return result.rows;
+    } catch (err) {
+      console.error('Error to get all Curriculum :', err);
+      throw err;
+    } finally {
+      client.release();
+    }
+  };
+
 const getCurrById = async (id) => {
     const client = await postgres.connect();
     try {
@@ -130,5 +143,6 @@ export default {
     checkCurr,
     createCurr,
     updateCurr,
-    deleteCurr
+    deleteCurr,
+    getTotalCurr
 };

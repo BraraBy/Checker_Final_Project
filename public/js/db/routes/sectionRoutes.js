@@ -14,6 +14,15 @@ rt.get('/', async (req, res) => {
     }
 });
 
+rt.get('/totalSec', async (req, res) => {
+    try {
+      const data = await Controller.getTotalSec();
+      res.status(200).json({ status: '200', result: data });
+    } catch (err) {
+      res.status(500).json({ status: '500', result: 'Server Error' });
+    }
+  });
+
 // Get sections by ID (GET /api/sections/:id)
 rt.get('/:id', async (req, res) => {
     const { id } = req.params;

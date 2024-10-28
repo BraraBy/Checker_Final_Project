@@ -14,6 +14,15 @@ rt.get('/', async (req, res) => {
     }
 });
 
+rt.get('/totalCurr', async (req, res) => {
+    try {
+      const data = await Controller.getTotalCurr();
+      res.status(200).json({ status: '200', result: data });
+    } catch (err) {
+      res.status(500).json({ status: '500', result: 'Server Error' });
+    }
+  });
+
 // Get curriculums by ID (GET /api/curriculums/:id)
 rt.get('/:id', async (req, res) => {
     const { id } = req.params;

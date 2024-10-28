@@ -39,6 +39,15 @@ rt.post('/', async (req, res) => {
     }
 });
 
+rt.get('/totalStdList', async (req, res) => {
+    try {
+      const data = await Controller.getTotalStdList();
+      res.status(200).json({ status: '200', result: data });
+    } catch (err) {
+      res.status(500).json({ status: '500', result: 'Server Error' });
+    }
+  });
+
 
 
 rt.put('/:id', async (req, res) => {
